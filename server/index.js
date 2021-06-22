@@ -2,12 +2,11 @@ const keys = require('./keys');
 
 // Express App Setup
 const express = require('express');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
 // Postgres Client Setup
 const { Pool } = require('pg');
@@ -41,6 +40,9 @@ app.get('/', (req, res) => {
 });
 
 app.get('/values/all', async (req, res) => {
+  pgClient
+    .query('CREATE TABLE IF NOT EXISTS val (number INT)')
+    .catch((err) => console.log(err));
 
   const values = await pgClient.query('SELECT * FROM val');
 
